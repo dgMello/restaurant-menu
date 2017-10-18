@@ -6,7 +6,7 @@
     <form action="#" method="post">
       <p>Are You Sure You Want to Delete?</p>
       <input type='submit' value='Delete'>
-      <a href='#'>Cancel</a>
+      <a href='{{url_for('showRestaurants', restaurants=restaurants)}}'>Cancel</a>
     </form>
   </body>
 </html>

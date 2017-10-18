@@ -10,8 +10,13 @@
       <textarea type='text' rows='5' cols='40' name='description'></textarea>
       <p>Price:</p>
       <input type='text' size='8' name='price'>
+      <p>Course:</p>
+      <input type='radio' name='course' value='appetizer' checked>Appetizer<br>
+      <input type='radio' name='course' value='entree'>Entree<br>
+      <input type='radio' name='course' value='dessert'>Dessert<br>
+      <input type='radio' name='course' value='beverage'>Beverage<br>
       <input type='submit' value='Create'>
-      <a href='#'>Cancel</a>
+      <a href='{{url_for('showMenu', restaurant=restaurant, items=items)}}'>Cancel</a>
     </form>
   </body>
 </html>

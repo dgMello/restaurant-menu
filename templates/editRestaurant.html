@@ -7,7 +7,7 @@
       <p>Name:</p>
       <input type='text' size='30' name='name' placeholder='{{restaurant.name}}'>
       <input type='submit' value='Edit'>
-      <a href='#'>Cancel</a>
+      <a href='{{url_for('showRestaurants', restaurants=restaurants)}}'>Cancel</a>
     </form>
   </body>
 </html>
