@@ -3,16 +3,28 @@
   <body>
     <h1>Restaurants</h1>
     <a href='{{url_for('newRestaurant')}}'>Create New Restaurant</a>
+    <div class = 'flash'>
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+    </div>
     {% if restaurants == [] %}
       <h3>No Restaurants Listed</h3>
     {% else %}
       {% for r in restaurants %}
       <div class = 'nameAndPrice'>
         <span class = 'name'><p>{{r.name}}</p></span>
+        <span class = 'name'><p>{{r.id}}</p></span>
       </div>
       <div class = "editdeletepane">
-        <a href='{{url_for('editRestaurant',restaurant_id = r.id,)}}' >Edit</a>
-        <a href='{{url_for('deleteRestaurant', restaurant_id = r.id)}}' >Delete</a>
+        <a href='{{url_for('editRestaurant',id = r.id,)}}' >Edit</a>
+        <a href='{{url_for('deleteRestaurant', id = r.id)}}' >Delete</a>
       </div>
       {% endfor %}
     {% endif %}

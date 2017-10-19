@@ -21,27 +21,39 @@ def showRestaurants():
 @app.route('/restaurant/new', methods=['GET', 'POST'])
 def newRestaurant():
         if request.method == 'POST':
-            newRestaurantName = request.form['name']
-            restaurants.insert((len(restaurants) + 1), newRestaurantName)
-            return redirect(url_for('showRestaurants', restaurants=restaurants))
+            newRestaurantName = Restaurant(name=request.form['name'])
+            session.add(newRestaurantName)
+            session.commit()
+            flash("New Restaurant Created!")
+            return redirect(url_for('showRestaurants'))
         else:
             return render_template('newRestaurant.html')
 
 
-@app.route('/restaurant/<int:restaurant_id>/edit', methods=['GET', 'POST'])
-def editRestaurant(restaurant_id):
+@app.route('/restaurant/<int:id>/edit', methods=['GET', 'POST'])
+def editRestaurant(id):
+    editedRestaurant = session.query(Restaurant).filter_by(id=id).one()
     if request.method == 'POST':
-        newRestaurantName = request.form['name']
-        restaurants.insert((len(restaurants) + 1), newRestaurantName)
-        return redirect(url_for('showRestaurants', restaurants=restaurants))
+        if request.form['name']:
+            editedRestaurant.name = request.form['name']
+        session.add(editedRestaurant)
+        session.commit()
+        flash("Restaurant Name Changed!")
+        return redirect(url_for('showRestaurants'))
     else:
-        return render_template('editRestaurant.html', restaurant=restaurant)
+        return render_template('editRestaurant.html', restaurant=editedRestaurant)
 
 
-@app.route('/restaurant/<int:restaurant_id>/delete', methods=['GET', 'POST'])
-def deleteRestaurant(restaurant_id):
-    #return "This page is for deleting restaurant %s" % restaurant_id
-    return render_template('deleteRestaurant.html', restaurant=restaurant)
+@app.route('/restaurant/<int:id>/delete', methods=['GET', 'POST'])
+def deleteRestaurant(id):
+    restaurantToDelete = session.query(Restaurant).filter_by(id=id).one()
+    if request.method == 'POST':
+        session.delete(restaurantToDelete)
+        session.commit()
+        flash("Restaurant Deleted!")
+        return redirect(url_for('showRestaurants'))
+    else:
+        return render_template('deleteRestaurant.html', restaurant=restaurantToDelete)
 
 
 @app.route('/restaurant/<int:restaurant_id>/menu', methods=['GET'])
@@ -86,5 +98,6 @@ def deleteMenuItem(restaurant_id, menu_id):
 
 
 if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
