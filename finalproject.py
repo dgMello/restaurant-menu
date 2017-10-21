@@ -119,6 +119,25 @@ def deleteMenuItem(restaurant_id, menu_id):
             restaurant_id=restaurant_id,item=itemToDelete)
 
 
+@app.route('/restaurants/JSON')
+def restaurantsJSON():
+    restaurants = session.query(Restaurant).all()
+    return jsonify(Restaurant=[r.serialize for r in restaurants])
+
+
+@app.route('/restaurant/<int:restaurant_id>/menu/JSON')
+def restaurantMenuJSON(restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
+    items = session.query(MenuItem).filter_by(restaurant_id=restaurant_id).all()
+    return jsonify(MenuItems=[i.serialize for i in items])
+
+
+@app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/JSON')
+def menuItemJSON(restaurant_id, menu_id):
+    menuItem = session.query(MenuItem).filter_by(id=menu_id).one()
+    return jsonify(MenuItems=[menuItem.serialize])
+
+
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
